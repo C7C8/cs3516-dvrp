@@ -10,10 +10,11 @@ struct NeighborCosts   *neighbor;
 /* students to write the following two routines, and maybe some others */
 
 void rtinit1() {
+	neighbor = malloc(sizeof(struct NeighborCosts));
     rtinitX(1, &dt, neighbor);
 }
 
 
 void rtupdate1( struct RoutePacket *rcvdpkt ) {
-	rtupdateX(1, rcvdpkt, &dt, neighbor);
+	rtupdateX(rcvdpkt, 1, &dt, neighbor);
 }

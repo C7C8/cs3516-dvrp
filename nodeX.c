@@ -1,13 +1,50 @@
 #include "nodeX.h"
 
-void rtinitX(const int callerId, NODE_ARGS){
+void rtinitX(NODE_ARGS){
+	*neighbor = *getNeighborCosts(callerId);
+
+	//Initialize all values of the costs table to INFINITY, except for the ones we already
+	//have distance values for.
+	for (int i = 0; i < MAX_NODES; i++)
+		for (int j = 0; j < MAX_NODES; j++)
+			dt->costs[i][j] = INFINITY;
+	for (int i = 0; i < MAX_NODES; i++)
+		dt->costs[i][i] = neighbor->NodeCosts[i]; //Direct routes
+	dt->costs[callerId][callerId] = INFINITY; //Not sure if this is correct
+
+	//Broadcast out the current distance vector
+	printdtX(callerId, neighbor, dt);
+	struct RoutePacket pkt;
+	pkt.sourceid = callerId;
+	printf("Sending destination vector { ");
+	for (int i = 0; i < MAX_NODES; i++) {
+		pkt.mincost[i] = getLeastCost(dt, i);
+		printf("%d ", pkt.mincost[i]);
+	}
+	printf("} to nodes ");
+	for (int i = 0; i < MAX_NODES; i++){
+		if (neighbor->NodeCosts[i] != INFINITY && i != callerId){
+			pkt.destid = i;
+			toLayer2(pkt);
+			printf("%d ", i);
+		}
+	}
+	printf("\n-------\n\n");
 
 }
 
-void rtupdateX(const int callerId, struct RoutePacket *rcvdpkt, NODE_ARGS){
+void rtupdateX(struct RoutePacket *rcvdpkt, NODE_ARGS){
 
 }
 
+int getLeastCost(const struct distance_table* dt, const int dest){
+	int cost = INFINITY;
+	for (int i = 0; i < MAX_NODES; i++){
+		if (dt->costs[dest][i] < cost)
+			cost = dt->costs[dest][i];
+	}
+	return cost;
+}
 
 /////////////////////////////////////////////////////////////////////
 //  printdt
