@@ -2,7 +2,8 @@
 #include "project3.h"
 
 
-//Function and struct definitions intended to make implementation across all nodes 
+//Function and struct definitions intended to make implementation across all nodes
+//This might be the laziest #define I've yet written
 #define NODE_ARGS struct distance_table* dt, struct NeighborCosts* neighbor
 struct distance_table {
   int costs[MAX_NODES][MAX_NODES];
