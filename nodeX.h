@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 #include "project3.h"
 
 
@@ -11,3 +12,4 @@ struct distance_table {
 
 void rtinitX(const int callerId, NODE_ARGS);
 void rtupdateX(const int callerId, struct RoutePacket* rcvdpkt, NODE_ARGS);
+void printdtX(int MyNodeNumber, struct NeighborCosts* neighbor, struct distance_table* dtptr);
