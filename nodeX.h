@@ -1,0 +1,12 @@
+#pragma once
+#include "project3.h"
+
+
+//Function and struct definitions intended to make implementation across all nodes 
+#define NODE_ARGS struct distance_table* dt, struct NeighborCosts* neighbor
+struct distance_table {
+  int costs[MAX_NODES][MAX_NODES];
+};
+
+void rtinitX(const int callerId, NODE_ARGS);
+void rtupdateX(const int callerId, struct RoutePacket* rcvdpkt, NODE_ARGS);
