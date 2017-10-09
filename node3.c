@@ -16,6 +16,5 @@ void rtinit3() {
 
 
 void rtupdate3( struct RoutePacket *rcvdpkt ) {
-	printf("Pointer: %d", dt3);
     rtupdateX(rcvdpkt, 3, &dt3, neighbor3);
 }

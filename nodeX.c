@@ -34,11 +34,12 @@ void rtinitX(NODE_ARGS){
 }
 
 void rtupdateX(struct RoutePacket *rcvdpkt, NODE_ARGS){
-	printf("%d BEFORE: { ", callerId);
+	printf("BEFORE: { ");
 	for (int i = 0; i < MAX_NODES; i++)
 		printf("%d ", neighbor->NodeCosts[i]);
 	printf("}\n");
 	printdtX(callerId, neighbor, dt);
+
 	//First copy the results into the table
 	int hasChanged = 0;
 	for (int i = 0; i < MAX_NODES; i++)
@@ -53,16 +54,29 @@ void rtupdateX(struct RoutePacket *rcvdpkt, NODE_ARGS){
 	if (hasChanged){
 		//Update distance vector and rebroadcast it
 		printf("Updating distance vector to { ");
+		struct RoutePacket pkt;
+		pkt.sourceid = callerId;
 		for (int i = 0; i < MAX_NODES; i++) {
 			neighbor->NodeCosts[i] = getLeastCost(dt, i);
+			pkt.mincost[i] = neighbor->NodeCosts[i];
 			printf("%d ", neighbor->NodeCosts[i]);
 		}
-		printf("}\n");
 
+		printf("}; sending to nodes ");
+		for (int i = 0; i < MAX_NODES; i++){
+			if (i != callerId && CONNECTED(callerId, i)){
+				pkt.destid = i;
+				toLayer2(pkt);
+				printf("%d ", i);
+			}
+		}
+		printf("\nAFTER:\n");
+		printdtX(callerId, neighbor, dt);
 	}
+	else
+		printf("No changes made to distance vector or route table\n");
 
-	printf("AFTER:\n");
-	printdtX(callerId, neighbor, dt);
+
 	printf("\n-----------\n\n");
 }
 
