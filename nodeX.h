@@ -4,6 +4,8 @@
 #include <string.h>
 #include "project3.h"
 
+//UNCOMMENT THIS FOR CLEANER OUTPUT
+//#define NVERBOSE
 
 //Function and struct definitions intended to make implementation across all nodes
 #define NODE_ARGS const int callerId, struct distance_table* dt, struct NeighborCosts* neighbor

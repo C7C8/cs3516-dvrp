@@ -117,6 +117,7 @@ int getLeastCost(const struct distance_table* dt, const int dest){
  */
 void printdtX( int MyNodeNumber, struct NeighborCosts *neighbor,
 			   struct distance_table *dtptr ) {
+#ifndef NVERBOSE
 	int       i, j;
 	int       TotalNodes = neighbor->NodesInNetwork;     // Total nodes in network
 	int       NumberOfNeighbors = 0;                     // How many neighbors
@@ -148,4 +149,7 @@ void printdtX( int MyNodeNumber, struct NeighborCosts *neighbor,
 		}
 	}
 	printf("\n");
-}    // End of printdt
+#else
+	printf("[NVERBOSE -- Verbose routing table output omitted]\n");
+#endif
+}
