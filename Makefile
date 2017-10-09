@@ -1,4 +1,4 @@
-CFLAGS=-Wall -O3
+CFLAGS=-Wall -O3 -std=c99
 FILES=project3.h nodeX.h nodeX.c project3.c node0.c node1.c node2.c node3.c README.txt Makefile NodeConfigurationFile
 
 all: dvrp
