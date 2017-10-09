@@ -29,8 +29,8 @@ void rtinitX(NODE_ARGS){
 			printf("%d ", i);
 		}
 	}
-	printf("\n-------\n\n");
 
+	printf("\n-------\n\n");
 }
 
 void rtupdateX(struct RoutePacket *rcvdpkt, NODE_ARGS){
