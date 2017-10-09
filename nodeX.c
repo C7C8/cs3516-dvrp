@@ -10,7 +10,7 @@ void rtinitX(NODE_ARGS){
 			dt->costs[i][j] = INFINITY;
 	for (int i = 0; i < MAX_NODES; i++)
 		dt->costs[i][i] = neighbor->NodeCosts[i]; //Direct routes
-	dt->costs[callerId][callerId] = INFINITY; //Not sure if this is correct
+	dt->costs[callerId][callerId] = 0; //Not sure if this is correct
 
 	//Broadcast out the current distance vector
 	printdtX(callerId, neighbor, dt);
@@ -34,7 +34,36 @@ void rtinitX(NODE_ARGS){
 }
 
 void rtupdateX(struct RoutePacket *rcvdpkt, NODE_ARGS){
+	printf("%d BEFORE: { ", callerId);
+	for (int i = 0; i < MAX_NODES; i++)
+		printf("%d ", neighbor->NodeCosts[i]);
+	printf("}\n");
+	printdtX(callerId, neighbor, dt);
+	//First copy the results into the table
+	int hasChanged = 0;
+	for (int i = 0; i < MAX_NODES; i++)
+		if (rcvdpkt->mincost[i] != INFINITY && rcvdpkt->mincost[i] != 0){
+			const int newCost = rcvdpkt->mincost[i] + BASE_COST(callerId, rcvdpkt->sourceid);
+			if (newCost < dt->costs[i][rcvdpkt->sourceid]) {
+				dt->costs[i][rcvdpkt->sourceid] = newCost;
+				hasChanged = 1;
+			}
+		}
 
+	if (hasChanged){
+		//Update distance vector and rebroadcast it
+		printf("Updating distance vector to { ");
+		for (int i = 0; i < MAX_NODES; i++) {
+			neighbor->NodeCosts[i] = getLeastCost(dt, i);
+			printf("%d ", neighbor->NodeCosts[i]);
+		}
+		printf("}\n");
+
+	}
+
+	printf("AFTER:\n");
+	printdtX(callerId, neighbor, dt);
+	printf("\n-----------\n\n");
 }
 
 int getLeastCost(const struct distance_table* dt, const int dest){
@@ -46,22 +75,21 @@ int getLeastCost(const struct distance_table* dt, const int dest){
 	return cost;
 }
 
-/////////////////////////////////////////////////////////////////////
-//  printdt
-//  This routine is being supplied to you.  It is the same code in
-//  each node and is tailored based on the input arguments.
-//  Required arguments:
-//  MyNodeNumber:  This routine assumes that you know your node
-//                 number and supply it when making this call.
-//  struct NeighborCosts *neighbor:  A pointer to the structure
-//                 that's supplied via a call to getNeighborCosts().
-//                 It tells this print routine the configuration
-//                 of nodes surrounding the node we're working on.
-//  struct distance_table *dtptr: This is the running record of the
-//                 current costs as seen by this node.  It is
-//                 constantly updated as the node gets new
-//                 messages from other nodes.
-/////////////////////////////////////////////////////////////////////
+/*  printdt
+ *  This routine is being supplied to you.  It is the same code in
+ *  each node and is tailored based on the input arguments.
+ *  Required arguments:
+ *  MyNodeNumber:  This routine assumes that you know your node
+ *                 number and supply it when making this call.
+ *  struct NeighborCosts *neighbor:  A pointer to the structure
+ *                 that's supplied via a call to getNeighborCosts().
+ *                 It tells this print routine the configuration
+ *                 of nodes surrounding the node we're working on.
+ *  struct distance_table *dtptr: This is the running record of the
+ *                 current costs as seen by this node.  It is
+ *                 constantly updated as the node gets new
+ *                 messages from other nodes.
+ */
 void printdtX( int MyNodeNumber, struct NeighborCosts *neighbor,
 			   struct distance_table *dtptr ) {
 	int       i, j;

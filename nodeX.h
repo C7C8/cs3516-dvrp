@@ -6,8 +6,10 @@
 
 
 //Function and struct definitions intended to make implementation across all nodes
-//This might be the laziest #define I've yet written
 #define NODE_ARGS const int callerId, struct distance_table* dt, struct NeighborCosts* neighbor
+#define BASE_COST(src, dst) ((const int)getNeighborCosts(src)->NodeCosts[dst])
+#define CONNECTED(src, dst) (BASE_COST(src, dst) != INFINITY)
+
 struct distance_table {
   int costs[MAX_NODES][MAX_NODES];
 };
