@@ -5,16 +5,15 @@
 extern int TraceLevel;
 
 struct distance_table dt0;
-struct NeighborCosts   *neighbor0;
+struct NeighborCosts neighbor0;
 
 /* students to write the following two routines, and maybe some others */
 
 void rtinit0() {
-	neighbor0 = malloc(sizeof(struct NeighborCosts));
-    rtinitX(0, &dt0, neighbor0);
+    rtinitX(0, &dt0, &neighbor0);
 }
 
 
 void rtupdate0( struct RoutePacket *rcvdpkt ) {
-    rtupdateX(rcvdpkt, 0, &dt0, neighbor0);
+    rtupdateX(rcvdpkt, 0, &dt0, &neighbor0);
 }
