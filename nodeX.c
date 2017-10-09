@@ -34,7 +34,7 @@ void rtinitX(NODE_ARGS){
 }
 
 void rtupdateX(struct RoutePacket *rcvdpkt, NODE_ARGS){
-	printf("BEFORE: { ");
+	printf("%d BEFORE: { ", callerId);
 	for (int i = 0; i < MAX_NODES; i++)
 		printf("%d ", neighbor->NodeCosts[i]);
 	printf("}\n");
